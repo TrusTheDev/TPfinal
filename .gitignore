@@ -1,0 +1,23 @@
+# build
+build/
+dist/
+
+# Compilados
+*.o
+*.elf
+*.hex
+*.map
+*.list
+
+# Dependencias / temporales
+*.d
+*.log
+*.tmp
+
+# MPLAB
+nbproject/private/
+
+*~
+*.bak
+
+.generated_files/
