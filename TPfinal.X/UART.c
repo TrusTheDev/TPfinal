@@ -1,6 +1,6 @@
 /*
  * File:   UART.c
- * Author: ivanb
+ * Author: Trusty
  *
  * Created on 3 de junio de 2026, 16:51
  */
@@ -10,8 +10,6 @@
 #include "UART.h"
 
 void InitUART(void){
-    while(1){
-        
-    }
+    
 }
 

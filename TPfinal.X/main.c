@@ -1,6 +1,6 @@
 /*
  * File:   main.c
- * Author: ivanb
+ * Author: Trusty
  *
  * Created on 3 de junio de 2026, 16:44
  */
@@ -15,6 +15,7 @@
 //Configuracion de puertos e inicio del programa
 
 int main(void) {
+    TRISA()
     InitADC();
     InitDMA();
     Init_Timer1();

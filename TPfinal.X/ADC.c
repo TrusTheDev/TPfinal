@@ -1,6 +1,6 @@
 /*
  * File:   config.c
- * Author: ivanb
+ * Author: Trusty
  *
  * Created on 3 de junio de 2026, 16:44
  */
