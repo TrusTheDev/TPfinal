@@ -7,9 +7,7 @@
 
 
 #include "xc.h"
-#include "UART.h"
-#include "TIMER.h"
-#include "ADC.h"
+#include "config.h"
 
 //Colocar rutinas de atencion aqui
 //Configuracion de puertos e inicio del programa
@@ -25,11 +23,7 @@ void __attribute__((interrupt, auto_psv)) _T1Interrupt(void) {
 }
 
 int main(void) {
-    InitADC();
-    InitDMA();
-    Init_Timer1();
-    Init_INT1();
-    InitUART();
+    config();
     while (1) {
     };
 }

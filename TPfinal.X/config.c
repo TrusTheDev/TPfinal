@@ -1,13 +1,12 @@
 /*
- * File:   timer.c
- * Author: Trusty
+ * File:   config.c
+ * Author: trusty
  *
- * Created on 3 de junio de 2026, 16:50
+ * Created on June 4, 2026, 3:03 PM
  */
 
 
 #include "xc.h"
-#include "TIMER.h"
 
 void Init_Timer1(void) {
     //Se configura Timer1
@@ -29,4 +28,9 @@ void Init_INT1(void) {
     INTCON2bits.INT1EP = 0; //Se configura como flanco ascendente
     IPC5bits.INT1IP = 5; //Se pone prioridad 5 al INT1
     IEC1bits.INT1IE = 1; //Se habilita la interrupción INT1
+}
+
+void config(void) {
+    Init_Timer1();
+    Init_INT1();
 }
