@@ -9,19 +9,53 @@
 #include "xc.h"
 #include "config.h"
 
-//Colocar rutinas de atencion aqui
 //Configuracion de puertos e inicio del programa
 
-void __attribute__((interrupt, auto_psv)) _DMA0Interrupt(void) {
-    /* Rutina de atención para la interrupción del DMA */
-    IFS0bits.DMA0IF = 0;
+typedef struct vehiculo {
+    int velocidad;
+    int ejes;
+    int timestamp;
+    int hora;
+    int minuto;
+    int segundo;
+} vehiculo;
+int totalVehiculos;
+int total2Ejes;
+int totalPesados;
+int totalExcesoVelocidad;
+
+vehiculo vehiculos[100];
+// Indice X es siempre la posicion 0
+// Indice Y apunta al ultimo vehiculo registrado
+int indiceX = 0;
+int indiceY = 0;
+//Precargar arreglo con vehiculos (opcional)
+
+
+
+void preCargar(void){
+    
 }
 
-void __attribute__((interrupt, auto_psv)) _T1Interrupt(void) {
-    /* Rutina de atención para la interrupción del Timer 1 */
-    IFS0bits.T1IF = 0;
+void registrarVehiculo(void){
+    
 }
 
+void obtenerCantidad2Ejes(void){
+    
+}
+
+void obtenerCantidadPesados(void){
+    
+}
+
+int obtenerCantidadExceso(void){
+    
+}
+
+int buscarVehiculosEntreHoras(void){
+    
+}
 int main(void) {
     config();
     while (1) {

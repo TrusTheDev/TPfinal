@@ -30,7 +30,30 @@ void Init_INT1(void) {
     IEC1bits.INT1IE = 1; //Se habilita la interrupción INT1
 }
 
+void Init_UART(void) {
+    	U1MODEbits.UARTEN = 0; // Se apaga el módulo para configurarlo
+    
+    // Configuración de la trama (19200 8N1)
+    U1MODEbits.BRGH = 1; // Modo de alta velocidad (divisor de 4)
+    U1MODEbits.PDSEL = 0; // 8 bits, sin paridad
+    U1MODEbits.STSEL = 0; // 1 bit de stop
+	U1MODEbits.RTSMD = 1; // Modo simplex
+
+	//U2BRG = BRGVAL;	// Se carga el valor del cálculo de baudios
+	IPC7 = 0x4400; // Se configura la prioridad de interrupción
+
+	//IFS1bits.U1RXIF = 0; // Se limpia la bandera de recepción
+	//IEC1bits.U1RXIE = 1; // Se prende la interrupción de recepción
+
+	U1MODEbits.UARTEN = 1; // Se prende el módulo UART
+	U1STAbits.UTXEN = 1; // Empieza a transmitir. Se dispara el Flag TXIF
+
+	//IFS1bits.U1TXIF = 0; // Se limpia la bandera de transmisión
+	//IEC1bits.U1TXIE = 0; // La interrupción está apagada
+}
+
 void config(void) {
     Init_Timer1();
     Init_INT1();
+    Init_UART();
 }

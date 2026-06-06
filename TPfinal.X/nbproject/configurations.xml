@@ -20,6 +20,8 @@
                    projectFiles="true">
       <itemPath>main.c</itemPath>
       <itemPath>config.c</itemPath>
+      <itemPath>routines.c</itemPath>
+      <itemPath>comunicacion.c</itemPath>
     </logicalFolder>
   </logicalFolder>
   <projectmakefile>Makefile</projectmakefile>
@@ -33,7 +35,7 @@
         <platformTool>Simulator</platformTool>
         <languageToolchain>XC16</languageToolchain>
         <languageToolchainVersion>2.10</languageToolchainVersion>
-        <platform>2</platform>
+        <platform>3</platform>
       </toolsSet>
       <packs>
         <pack name="dsPIC33F-GP-MC_DFP" vendor="Microchip" version="1.4.235"/>
