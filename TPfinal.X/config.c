@@ -8,6 +8,16 @@
 
 #include "xc.h"
 
+// Configuración de la velocidad para FCY = 1MHz (El proyecto esta en esta config.)
+#define FCY 1000000
+#define BAUDRATE 19200
+#define BRGVAL ((FCY / BAUDRATE) / 4) - 1 //El TP4 hace algo raro con esto
+
+void Init_puertos(void) {
+    // Se configuran los puertos
+    TRISD = 0xFFFF; // RD6,RD7, RD13 como entrada
+    TRISA = 0x0001; // RD0 como camara fotografica (entrada)
+}
 void Init_Timer1(void) {
     //Se configura Timer1
     T1CONbits.TON = 0; //Se asegura que esté apagado para configurarlo
@@ -53,6 +63,7 @@ void Init_UART(void) {
 }
 
 void config(void) {
+    Init_puertos();
     Init_Timer1();
     Init_INT1();
     Init_UART();
