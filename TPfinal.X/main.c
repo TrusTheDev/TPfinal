@@ -5,25 +5,34 @@
  * Created on 3 de junio de 2026, 16:44
  */
 
-
 #include "xc.h"
 #include "config.h"
+#include "common.h"
 
-//Colocar rutinas de atencion aqui
-//Configuracion de puertos e inicio del programa
+vehiculo vehiculos[256];
+unsigned char indiceAutos = 0;
+unsigned int totalVehiculos = 0; 
+unsigned int total2Ejes = 0;
+unsigned int totalPesados = 0;
+unsigned int totalExcesoVelocidad = 0;
+unsigned char paqueteRecibido = 0;
 
-void __attribute__((interrupt, auto_psv)) _DMA0Interrupt(void) {
-    /* Rutina de atención para la interrupción del DMA */
-    IFS0bits.DMA0IF = 0;
+// Función para simular vehículos
+void preCargarVehiculos(void){
+    
 }
 
-void __attribute__((interrupt, auto_psv)) _T1Interrupt(void) {
-    /* Rutina de atención para la interrupción del Timer 1 */
-    IFS0bits.T1IF = 0;
-}
-
-int main(void) {
-    config();
-    while (1) {
-    };
+int main(void){
+    config(); // Inicialización
+    
+    preCargarVehiculos(); // Precarga para simular
+    
+    while(1){
+        // Si llega un paquete
+        if(paqueteRecibido == 1){
+            paqueteRecibido = 0; // Se baja la bandera
+            
+            // Logica del main
+        }
+    }
 }
