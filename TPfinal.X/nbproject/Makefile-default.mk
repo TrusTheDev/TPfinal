@@ -51,17 +51,17 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Source Files Quoted if spaced
-SOURCEFILES_QUOTED_IF_SPACED=main.c config.c routines.c comunicacion.c
+SOURCEFILES_QUOTED_IF_SPACED=main.c config.c comunicacion.c sensores.c
 
 # Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/main.o ${OBJECTDIR}/config.o ${OBJECTDIR}/routines.o ${OBJECTDIR}/comunicacion.o
-POSSIBLE_DEPFILES=${OBJECTDIR}/main.o.d ${OBJECTDIR}/config.o.d ${OBJECTDIR}/routines.o.d ${OBJECTDIR}/comunicacion.o.d
+OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/main.o ${OBJECTDIR}/config.o ${OBJECTDIR}/comunicacion.o ${OBJECTDIR}/sensores.o
+POSSIBLE_DEPFILES=${OBJECTDIR}/main.o.d ${OBJECTDIR}/config.o.d ${OBJECTDIR}/comunicacion.o.d ${OBJECTDIR}/sensores.o.d
 
 # Object Files
-OBJECTFILES=${OBJECTDIR}/main.o ${OBJECTDIR}/config.o ${OBJECTDIR}/routines.o ${OBJECTDIR}/comunicacion.o
+OBJECTFILES=${OBJECTDIR}/main.o ${OBJECTDIR}/config.o ${OBJECTDIR}/comunicacion.o ${OBJECTDIR}/sensores.o
 
 # Source Files
-SOURCEFILES=main.c config.c routines.c comunicacion.c
+SOURCEFILES=main.c config.c comunicacion.c sensores.c
 
 
 
@@ -89,55 +89,127 @@ MP_LINKER_FILE_OPTION=,--script=p33FJ256GP710.gld
 # ------------------------------------------------------------------------------------
 # Rules for buildStep: compile
 ifeq ($(TYPE_IMAGE), DEBUG_RUN)
+<<<<<<< HEAD
 ${OBJECTDIR}/main.o: main.c  .generated_files/flags/default/96b2b804ef49697d4ba58bab25d7bab713a9b53a .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+=======
+<<<<<<< HEAD
+${OBJECTDIR}/main.o: main.c  .generated_files/flags/default/44189e6b3fc3972e3abc6d38999b29d79cb77a5d .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+=======
+${OBJECTDIR}/main.o: main.c  .generated_files/flags/default/2d6b6e9f08cf68ee8c02387b046e4769d2c629d5 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+>>>>>>> 1f7cffe146ddc464184f202b0b7afb34e9c1ccbb
+>>>>>>> 3ea6f272ca5aa9388bc089eedd68b8ba6e8297c9
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/main.o.d 
 	@${RM} ${OBJECTDIR}/main.o 
 	${MP_CC} $(MP_EXTRA_CC_PRE)  main.c  -o ${OBJECTDIR}/main.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/main.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_SIMULATOR=1    -omf=elf -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
 	
+<<<<<<< HEAD
 ${OBJECTDIR}/config.o: config.c  .generated_files/flags/default/960e6d322d1be68586d69758cfdb966aef0d8827 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+=======
+<<<<<<< HEAD
+${OBJECTDIR}/config.o: config.c  .generated_files/flags/default/9fe344a8cab9140cdf6133c246165ff1300ae869 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+=======
+${OBJECTDIR}/config.o: config.c  .generated_files/flags/default/2959fd5103bd74f16876e028732acc49357f6c4b .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+>>>>>>> 1f7cffe146ddc464184f202b0b7afb34e9c1ccbb
+>>>>>>> 3ea6f272ca5aa9388bc089eedd68b8ba6e8297c9
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/config.o.d 
 	@${RM} ${OBJECTDIR}/config.o 
 	${MP_CC} $(MP_EXTRA_CC_PRE)  config.c  -o ${OBJECTDIR}/config.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/config.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_SIMULATOR=1    -omf=elf -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
 	
+<<<<<<< HEAD
 ${OBJECTDIR}/routines.o: routines.c  .generated_files/flags/default/926b7bb1b09727d98475f0b349347de4a73556b .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+=======
+<<<<<<< HEAD
+${OBJECTDIR}/comunicacion.o: comunicacion.c  .generated_files/flags/default/44bf29f993cee14287fe0621435dafdb82cc9482 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+=======
+${OBJECTDIR}/routines.o: routines.c  .generated_files/flags/default/eb55f1092887d0e4e664ed172537486d1424b9dc .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+>>>>>>> 3ea6f272ca5aa9388bc089eedd68b8ba6e8297c9
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/routines.o.d 
 	@${RM} ${OBJECTDIR}/routines.o 
 	${MP_CC} $(MP_EXTRA_CC_PRE)  routines.c  -o ${OBJECTDIR}/routines.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/routines.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_SIMULATOR=1    -omf=elf -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
 	
+<<<<<<< HEAD
 ${OBJECTDIR}/comunicacion.o: comunicacion.c  .generated_files/flags/default/cbbddd097f4b24547a8d415c4d7c9bb1f67e091e .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+=======
+${OBJECTDIR}/comunicacion.o: comunicacion.c  .generated_files/flags/default/575c5fa5fd1ca2b27660379189a25cba2f9d50bd .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+>>>>>>> 1f7cffe146ddc464184f202b0b7afb34e9c1ccbb
+>>>>>>> 3ea6f272ca5aa9388bc089eedd68b8ba6e8297c9
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/comunicacion.o.d 
 	@${RM} ${OBJECTDIR}/comunicacion.o 
 	${MP_CC} $(MP_EXTRA_CC_PRE)  comunicacion.c  -o ${OBJECTDIR}/comunicacion.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/comunicacion.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_SIMULATOR=1    -omf=elf -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
 	
+<<<<<<< HEAD
+${OBJECTDIR}/sensores.o: sensores.c  .generated_files/flags/default/6e399206f3a9bb4f043ab918e368b1ff506728f3 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/sensores.o.d 
+	@${RM} ${OBJECTDIR}/sensores.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  sensores.c  -o ${OBJECTDIR}/sensores.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/sensores.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_SIMULATOR=1    -omf=elf -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
+	
 else
+${OBJECTDIR}/main.o: main.c  .generated_files/flags/default/cf045d9b4f5c45b90648fe0bc429215d2b4c10fe .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+=======
+else
+<<<<<<< HEAD
 ${OBJECTDIR}/main.o: main.c  .generated_files/flags/default/586c3e46b3de00a085147cc3e723810c48fa505e .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+=======
+${OBJECTDIR}/main.o: main.c  .generated_files/flags/default/166b8051bfd7ce51a26485af3222073d5df819f1 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+>>>>>>> 1f7cffe146ddc464184f202b0b7afb34e9c1ccbb
+>>>>>>> 3ea6f272ca5aa9388bc089eedd68b8ba6e8297c9
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/main.o.d 
 	@${RM} ${OBJECTDIR}/main.o 
 	${MP_CC} $(MP_EXTRA_CC_PRE)  main.c  -o ${OBJECTDIR}/main.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/main.o.d"        -g -omf=elf -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
 	
+<<<<<<< HEAD
 ${OBJECTDIR}/config.o: config.c  .generated_files/flags/default/f0a9ad52ba65ee1e04f6c825674c1ffa78f67105 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+=======
+<<<<<<< HEAD
+${OBJECTDIR}/config.o: config.c  .generated_files/flags/default/8c6074641481f11a872fffc222573865094414e9 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+=======
+${OBJECTDIR}/config.o: config.c  .generated_files/flags/default/6e74845d3501773ddcc6c29e3b34a9841e919506 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+>>>>>>> 1f7cffe146ddc464184f202b0b7afb34e9c1ccbb
+>>>>>>> 3ea6f272ca5aa9388bc089eedd68b8ba6e8297c9
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/config.o.d 
 	@${RM} ${OBJECTDIR}/config.o 
 	${MP_CC} $(MP_EXTRA_CC_PRE)  config.c  -o ${OBJECTDIR}/config.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/config.o.d"        -g -omf=elf -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
 	
+<<<<<<< HEAD
 ${OBJECTDIR}/routines.o: routines.c  .generated_files/flags/default/25110bc0f517f45e92199a9231cfc52e611aa1c1 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+=======
+<<<<<<< HEAD
+${OBJECTDIR}/comunicacion.o: comunicacion.c  .generated_files/flags/default/5a92859b8bd3e75eb3764f28dfc4600ee3419368 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+=======
+${OBJECTDIR}/routines.o: routines.c  .generated_files/flags/default/18f8aaf8d3937a54c70c220e35603e74fc5dcd2 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+>>>>>>> 3ea6f272ca5aa9388bc089eedd68b8ba6e8297c9
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/routines.o.d 
 	@${RM} ${OBJECTDIR}/routines.o 
 	${MP_CC} $(MP_EXTRA_CC_PRE)  routines.c  -o ${OBJECTDIR}/routines.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/routines.o.d"        -g -omf=elf -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
 	
+<<<<<<< HEAD
 ${OBJECTDIR}/comunicacion.o: comunicacion.c  .generated_files/flags/default/83702142e33207473218016637015c2448e9f08f .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+=======
+${OBJECTDIR}/comunicacion.o: comunicacion.c  .generated_files/flags/default/ae34332e3dca2762f81e25865c38756bcf645a1b .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+>>>>>>> 1f7cffe146ddc464184f202b0b7afb34e9c1ccbb
+>>>>>>> 3ea6f272ca5aa9388bc089eedd68b8ba6e8297c9
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/comunicacion.o.d 
 	@${RM} ${OBJECTDIR}/comunicacion.o 
 	${MP_CC} $(MP_EXTRA_CC_PRE)  comunicacion.c  -o ${OBJECTDIR}/comunicacion.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/comunicacion.o.d"        -g -omf=elf -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
 	
+<<<<<<< HEAD
+${OBJECTDIR}/sensores.o: sensores.c  .generated_files/flags/default/b88e2a83120f55f10510ab8ed6b061a2a0de41d6 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/sensores.o.d 
+	@${RM} ${OBJECTDIR}/sensores.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  sensores.c  -o ${OBJECTDIR}/sensores.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/sensores.o.d"        -g -omf=elf -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
+	
+=======
+>>>>>>> 1f7cffe146ddc464184f202b0b7afb34e9c1ccbb
 endif
 
 # ------------------------------------------------------------------------------------

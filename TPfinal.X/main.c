@@ -17,13 +17,13 @@ unsigned int totalPesados = 0;
 unsigned int totalExcesoVelocidad = 0;
 unsigned char paqueteRecibido = 0;
 
-// Función para simular vehículos
+// Funciï¿½n para simular vehï¿½culos
 void preCargarVehiculos(void){
     
 }
 
 int main(void){
-    config(); // Inicialización
+    config(); // Inicializaciï¿½n
     
     preCargarVehiculos(); // Precarga para simular
     
