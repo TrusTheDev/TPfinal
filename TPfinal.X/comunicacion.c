@@ -5,40 +5,49 @@
  * Created on June 5, 2026, 8:15 PM
  */
 
-
 #include "xc.h"
+#include "common.h"
 
+// Variables locales
+unsigned char bufferRX[20]; // Aca se guarda lo que llega de la PC
+unsigned char bufferTX[20]; // Aca se arma la respuesta para la PC
+
+// Indices para los arreglos
+unsigned char indiceRX = 0;
+unsigned char indiceTX = 0;
+
+// CAPA FISICA
+
+// Rutina de interrupción para recepción
 void __attribute__((interrupt, auto_psv)) _U2RXInterrupt( void ){
 	IFS1bits.U2RXIF = 0; // Se limpia la bandera de interrupción
 }
 
-//Rutina de INT para transmisión (no hace nada)
+//Rutina de interrupción para transmisión
 void __attribute__((interrupt, auto_psv)) _U2TXInterrupt(void){
-    IFS1bits.U2TXIF = 0; // Se limpia la bandera por seguridad
+    IFS1bits.U2TXIF = 0; // Se limpia la bandera de interrupción
 }
 
-//Comando que llega por UART
-int recepcion[20];
-extern int indiceX;
-extern int indiceY;
-extern vehiculos;
+// CAPA DE TRANSPORTE
 
-int validarPaquete(){
+// Función auxiliar para calcular el checksum
+unsigned char calcularChecksum(){
     
 }
 
-int destinoCorrecto(){
+// Función que revisa el destino y el checksum
+void capaTransporte(void){
     
 }
 
-int cumpleQTY(){
+// CAPA DE APLICACION
+
+// Función auxiliar que arma la trama final y dispara TX
+void construirPaquete(void){
     
 }
 
-int calcularchecksum(){
-    
-}
-
-void construirPaquete(char comando){
+// Procesa los comandos y arma la respuesta
+void capaAplicacion(void){
     
 }

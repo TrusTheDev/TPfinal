@@ -5,59 +5,34 @@
  * Created on 3 de junio de 2026, 16:44
  */
 
-
 #include "xc.h"
 #include "config.h"
+#include "common.h"
 
-//Configuracion de puertos e inicio del programa
+vehiculo vehiculos[256];
+unsigned char indiceAutos = 0;
+unsigned int totalVehiculos = 0; 
+unsigned int total2Ejes = 0;
+unsigned int totalPesados = 0;
+unsigned int totalExcesoVelocidad = 0;
+unsigned char paqueteRecibido = 0;
 
-typedef struct vehiculo {
-    int velocidad;
-    int ejes;
-    int timestamp;
-    int hora;
-    int minuto;
-    int segundo;
-} vehiculo;
-int totalVehiculos;
-int total2Ejes;
-int totalPesados;
-int totalExcesoVelocidad;
-
-vehiculo vehiculos[100];
-// Indice X es siempre la posicion 0
-// Indice Y apunta al ultimo vehiculo registrado
-int indiceX = 0;
-int indiceY = 0;
-//Precargar arreglo con vehiculos (opcional)
-
-
-
-void preCargar(void){
+// Función para simular vehículos
+void preCargarVehiculos(void){
     
 }
 
-void registrarVehiculo(void){
+int main(void){
+    config(); // Inicialización
     
-}
-
-void obtenerCantidad2Ejes(void){
+    preCargarVehiculos(); // Precarga para simular
     
-}
-
-void obtenerCantidadPesados(void){
-    
-}
-
-int obtenerCantidadExceso(void){
-    
-}
-
-int buscarVehiculosEntreHoras(void){
-    
-}
-int main(void) {
-    config();
-    while (1) {
-    };
+    while(1){
+        // Si llega un paquete
+        if(paqueteRecibido == 1){
+            paqueteRecibido = 0; // Se baja la bandera
+            
+            // Logica del main
+        }
+    }
 }
