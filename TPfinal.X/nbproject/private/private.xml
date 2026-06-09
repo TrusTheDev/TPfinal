@@ -3,12 +3,19 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+<<<<<<< HEAD
             <file>file:/C:/Users/ignac/MPLAB/TPfinal.X/main.c</file>
             <file>file:/C:/Users/ignac/MPLAB/TPfinal.X/common.h</file>
             <file>file:/C:/Users/ignac/MPLAB/TPfinal.X/config.c</file>
             <file>file:/C:/Users/ignac/MPLAB/TPfinal.X/comunicacion.c</file>
             <file>file:/C:/Users/ignac/MPLAB/TPfinal.X/config.h</file>
             <file>file:/C:/Users/ignac/MPLAB/TPfinal.X/sensores.c</file>
+=======
+            <file>file:/C:/Users/ivanb/Desktop/TPfinal/TPfinal.X/main.c</file>
+            <file>file:/C:/Users/ivanb/Desktop/TPfinal/TPfinal.X/config.c</file>
+            <file>file:/C:/Users/ivanb/Desktop/TPfinal/TPfinal.X/comunicacion.c</file>
+            <file>file:/C:/Users/ivanb/Desktop/TPfinal/TPfinal.X/routines.c</file>
+>>>>>>> 1f7cffe146ddc464184f202b0b7afb34e9c1ccbb
         </group>
     </open-files>
 </project-private>

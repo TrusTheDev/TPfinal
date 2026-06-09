@@ -15,6 +15,7 @@
 # $ makeMP_CC="/opt/microchip/mplabc30/v3.30c/bin/pic30-gcc" ...  
 #
 SHELL=cmd.exe
+<<<<<<< HEAD
 PATH_TO_IDE_BIN=C:/Program Files/Microchip/MPLABX/v6.30/mplab_platform/platform/../mplab_ide/modules/../../bin/
 # Adding MPLAB X bin directory to path.
 PATH:=C:/Program Files/Microchip/MPLABX/v6.30/mplab_platform/platform/../mplab_ide/modules/../../bin/:$(PATH)
@@ -35,3 +36,25 @@ MP_AS_DIR="C:\Program Files\Microchip\xc16\v2.10\bin"
 MP_LD_DIR="C:\Program Files\Microchip\xc16\v2.10\bin"
 MP_AR_DIR="C:\Program Files\Microchip\xc16\v2.10\bin"
 DFP_DIR=C:/Program Files/Microchip/MPLABX/v6.30/packs/Microchip/dsPIC33F-GP-MC_DFP/1.4.235
+=======
+PATH_TO_IDE_BIN=A:/BORRARMPLAB/mplab/mplab_platform/platform/../mplab_ide/modules/../../bin/
+# Adding MPLAB X bin directory to path.
+PATH:=A:/BORRARMPLAB/mplab/mplab_platform/platform/../mplab_ide/modules/../../bin/:$(PATH)
+# Path to java used to run MPLAB X when this makefile was created
+MP_JAVA_PATH="A:\BORRARMPLAB\mplab\sys\java\zulu8.86.0.25-ca-fx-jre8.0.452-win_x64/bin/"
+OS_CURRENT="$(shell uname -s)"
+MP_CC="A:\BORRARMPLAB\Compiler\bin\xc16-gcc.exe"
+# MP_CPPC is not defined
+# MP_BC is not defined
+MP_AS="A:\BORRARMPLAB\Compiler\bin\xc16-as.exe"
+MP_LD="A:\BORRARMPLAB\Compiler\bin\xc16-ld.exe"
+MP_AR="A:\BORRARMPLAB\Compiler\bin\xc16-ar.exe"
+DEP_GEN=${MP_JAVA_PATH}java -jar "A:/BORRARMPLAB/mplab/mplab_platform/platform/../mplab_ide/modules/../../bin/extractobjectdependencies.jar"
+MP_CC_DIR="A:\BORRARMPLAB\Compiler\bin"
+# MP_CPPC_DIR is not defined
+# MP_BC_DIR is not defined
+MP_AS_DIR="A:\BORRARMPLAB\Compiler\bin"
+MP_LD_DIR="A:\BORRARMPLAB\Compiler\bin"
+MP_AR_DIR="A:\BORRARMPLAB\Compiler\bin"
+DFP_DIR=A:/BORRARMPLAB/mplab/packs/Microchip/dsPIC33F-GP-MC_DFP/1.4.235
+>>>>>>> 1f7cffe146ddc464184f202b0b7afb34e9c1ccbb
