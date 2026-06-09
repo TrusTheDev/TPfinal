@@ -9,6 +9,7 @@
 #include "config.h"
 
 /*HAY QUE VER BIEN ESTO
+ * Ivan: El proyecto esta a 40 mhz.
 #define FCY 40000000
 #define BAUDRATE 19200
 #define BRGVAL ((FCY / BAUDRATE) / 16) - 1
@@ -29,7 +30,10 @@ void Init_Timer1(void){
     T1CONbits.TON = 0; // Se asegura que estï¿½ apagado para configurarlo
     T1CONbits.TCS = 0; // Reloj interno
     //T1CONbits.TCKPS = ; // Hay que calcularlo
-    //PR1 = ; // Hay que calcularlo
+    //PR1 = 65535 ; // Hay que calcularlo
+    //Ivan: Se supone que solamente tenemos que apagarlo y resetearlo-
+    //cuando es requerido, utilizo el máximo.
+    //Capaz es una buena idea tener un contador de overflows para tener mejor el tiempo?
     TMR1 = 0; // Se resetea el cronï¿½metro a 0
 
     // Se configura la interrupciï¿½n
