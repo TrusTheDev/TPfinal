@@ -83,12 +83,12 @@ void __attribute__((interrupt, auto_psv)) _CNInterrupt(void){
 }
 // Función auxiliar que junta los datos y los mete en el arreglo
 void registrarVehiculo(){
-    vehiculos[indiceAutos].ejes = contadorEjes;
-    vehiculos[indiceAutos].velocidad = velocidad;
+    vehiculos[indiceAutos].ejes = (char) contadorEjes;
+    vehiculos[indiceAutos].velocidad = (char) velocidad;
     vehiculos[indiceAutos].infraccion = velocidad > 60 ? 'S' : 'N';
-    vehiculos[indiceAutos].hora = horas;
-    vehiculos[indiceAutos].minuto = minutos;
-    vehiculos[indiceAutos].segundo = segundos;
+    vehiculos[indiceAutos].hora = (char) horas;
+    vehiculos[indiceAutos].minuto = (char) minutos;
+    vehiculos[indiceAutos].segundo = (char) segundos;
     
     if(indiceAutos <= 256){
         indiceAutos++;
