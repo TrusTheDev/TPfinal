@@ -9,6 +9,7 @@ typedef struct{
     unsigned char minuto;
     unsigned char segundo;
     unsigned char velocidad;
+    unsigned char infraccion;
     unsigned char ejes;
 } vehiculo;
 

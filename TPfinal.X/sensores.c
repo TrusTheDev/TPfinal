@@ -65,6 +65,9 @@ void __attribute__((interrupt, auto_psv)) _CNInterrupt(void){
                 int delta = milisegundos - tiempoInicio;
                 if(delta > 0){
                     velocidad = 1440 / delta;
+                    if (velocidad > 60) {
+                        PORTAbits.RA0 = !PORTAbits.RA0;
+                    }
                 }
             }
         }
