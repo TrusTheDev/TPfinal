@@ -42,6 +42,22 @@ void Init_Timer1(void){
     IEC0bits.T1IE = 1; // Se habilita la interrupci�n Timer1
     T1CONbits.TON = 0; // Se va a prender cuando el vehiculo pise el primer sensor
 }
+//Ojo, el timer esta configurado para 40mhz
+void Init_Timer6( void )
+{
+	/* ensure Timer 6 is in reset state */
+	T6CON = 0;
+	T6CONbits.TCKPS = 1; //Prescaler 8
+	/* reset Timer 6 interrupt flag */
+ 	IFS2bits.T6IF = 0;
+ 	/* set Timer interrupt priority level */
+	IPC11bits.T6IP = 5;
+	/* enable Timer interrupt */
+ 	IEC2bits.T6IE = 1;
+	/* set Timer period register */
+	PR6 = 4999;
+	T6CONbits.TON = 1; 	//habilito Timer
+}
 
 void Init_CN(void){
     IFS1bits.CNIF = 0; // Se limpia la bandera
@@ -83,6 +99,7 @@ void Init_UART2(void){
 void config(void){
     Init_Puertos();
     Init_Timer1();
+    Init_Timer6();
     Init_CN();
     Init_UART2();
 }
