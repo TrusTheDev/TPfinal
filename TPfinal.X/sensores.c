@@ -9,28 +9,34 @@
 #include "common.h"
 
 // Variables locales
-
-
+int contadorEjes = 0;
+int auxTMR;
 // Rutina de atención para la interrupción del Timer 1
-void __attribute__((interrupt, auto_psv)) _T1Interrupt(void){
+
+void __attribute__((interrupt, auto_psv)) _T1Interrupt(void) {
     IFS0bits.T1IF = 0;
 }
 
 // Rutina de atención para change notification
-void __attribute__((interrupt, auto_psv)) _CNInterrupt(void){
+
+void __attribute__((interrupt, auto_psv)) _CNInterrupt(void) {
     IFS1bits.CNIF = 0;
     //Hay presencia de vehiculo
     if (PORTDbits.RD13) {
         //Si solamente se tocaron las primeras ruedas 1 0
-        if (PORTDbits.RD6 && PORTDbits.RD7 == 0) {
+        if (PORTDbits.RD6) {
             //Encender timer
-            T1CONbits.TON = 1;
-        }
-        //Ya se tocaron las ruedas delanteras con el primer y segundo sensor, 1 1
-        if (PORTDbits.RD6 && PORTDbits.RD7) {
-            //Apagar timer
-            T1CONbits.TON = 0;
-            IFS0bits.T1IF = 1;
+            contadorEjes++;
+            if (contadorEjes == 1) {
+                TMR1 = 0;
+                T1CONbits.TON = 1;
+            }
+            if (PORTDbits.RD7) {
+                if (contadorEjes == 1) {
+                    T1CONbits.TON = 0;
+                }
+                auxTMR = TMR1;
+            }
         }
     }
 }
