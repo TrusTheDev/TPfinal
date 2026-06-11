@@ -9,12 +9,11 @@ typedef struct{
     unsigned char minuto;
     unsigned char segundo;
     unsigned char velocidad;
-    unsigned char infraccion;
     unsigned char ejes;
 } vehiculo;
 
 extern vehiculo vehiculos[256]; // Arreglo circular de estructuras
-extern unsigned char indiceAutos; // Indice para el arreglo (0 a 255)
+extern unsigned char indiceVehiculos; // Indice para el arreglo (0 a 255)
 
 // Contadores
 extern unsigned int totalVehiculos; 

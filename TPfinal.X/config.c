@@ -9,7 +9,6 @@
 #include "config.h"
 
 /*HAY QUE VER BIEN ESTO
- * Ivan: El proyecto esta a 40 mhz.
 #define FCY 40000000
 #define BAUDRATE 19200
 #define BRGVAL ((FCY / BAUDRATE) / 16) - 1
@@ -21,42 +20,22 @@ void Init_Puertos(void){
     TRISDbits.TRISD7 = 1;  // Sensor cable 2 como entrada
     TRISDbits.TRISD13 = 1; // Sensor inductivo como entrada
     
-    TRISAbits.TRISA0 = 0; // Cï¿½mara fotogrï¿½fica como salida
+    TRISAbits.TRISA0 = 0; // Cámara fotográfica como salida
     LATAbits.LATA0 = 0; // Arranca apagada
 }
 
-void Init_Timer1(void){
-    // Se configura Timer1 para medir el tiempo entre sensores
-    T1CONbits.TON = 0; // Se asegura que estï¿½ apagado para configurarlo
-    T1CONbits.TCS = 0; // Reloj interno
-    //T1CONbits.TCKPS = ; // Hay que calcularlo
-    //PR1 = 65535 ; // Hay que calcularlo
-    //Ivan: Se supone que solamente tenemos que apagarlo y resetearlo-
-    //cuando es requerido, utilizo el máximo.
-    //Capaz es una buena idea tener un contador de overflows para tener mejor el tiempo?
-    TMR1 = 0; // Se resetea el cronï¿½metro a 0
-
-    // Se configura la interrupciï¿½n
-    IPC0bits.T1IP = 1; // Se pone prioridad 1 al Timer1
-    IFS0bits.T1IF = 0; // Se limpia el Interrupt Flag para arrancar en limpio
-    IEC0bits.T1IE = 1; // Se habilita la interrupciï¿½n Timer1
-    T1CONbits.TON = 0; // Se va a prender cuando el vehiculo pise el primer sensor
-}
-//Ojo, el timer esta configurado para 40mhz
-void Init_Timer6( void )
-{
-	/* ensure Timer 6 is in reset state */
-	T6CON = 0;
-	T6CONbits.TCKPS = 1; //Prescaler 8
-	/* reset Timer 6 interrupt flag */
- 	IFS2bits.T6IF = 0;
- 	/* set Timer interrupt priority level */
-	IPC11bits.T6IP = 5;
-	/* enable Timer interrupt */
- 	IEC2bits.T6IE = 1;
-	/* set Timer period register */
-	PR6 = 4999;
-	T6CONbits.TON = 1; 	//habilito Timer
+// Timer configurado para 40MHz
+void Init_Timer6( void ){
+    // Se configura Timer6 para medir el tiempo entre sensores
+    T6CONbits.TON = 0; // Se asegura que esté apagado para configurarlo
+    T6CONbits.TCKPS = 1; // Prescaler 1:8
+    
+    IFS2bits.T6IF = 0; // Se limpia la bandera de interrupcion
+    IPC11bits.T6IP = 5; // Prioridad 5
+    IEC2bits.T6IE = 1; // Se habilita la interrupción
+    
+    PR6 = 4999; // PR6 para 1ms
+    T6CONbits.TON = 1; // Se prende el Timer
 }
 
 void Init_CN(void){
@@ -73,32 +52,31 @@ void Init_CN(void){
 }
 
 void Init_UART2(void){
-    U2MODEbits.UARTEN = 0; // Se apaga el mï¿½dulo para configurarlo
+    U2MODEbits.UARTEN = 0; // Se apaga el módulo para configurarlo
     
     /* HAY QUE VER BIEN ESTO
-    // Configuraciï¿½n de la trama
+    // Configuración de la trama
     U2MODEbits.BRGH = 0; // Modo de velocidad estandar
     U2MODEbits.PDSEL = 0; // 8 bits, sin paridad
     U2MODEbits.STSEL = 0; // 1 bit de stop
 	U2MODEbits.RTSMD = 1; // Modo simplex
     */ 
 
-	//U2BRG = BRGVAL;	// Se carga el valor del cï¿½lculo de baudios
-	IPC7 = 0x4400; // Se configura la prioridad de interrupciï¿½n
+	//U2BRG = BRGVAL;	// Se carga el valor del cálculo de baudios
+	IPC7 = 0x4400; // Se configura la prioridad de interrupción
 
-	IFS1bits.U2RXIF = 0; // Se limpia la bandera de recepciï¿½n
-	IEC1bits.U2RXIE = 1; // Se prende la interrupciï¿½n de recepciï¿½n
+	IFS1bits.U2RXIF = 0; // Se limpia la bandera de recepción
+	IEC1bits.U2RXIE = 1; // Se prende la interrupción de recepción
 
-	U2MODEbits.UARTEN = 1; // Se prende el mï¿½dulo UART
+	U2MODEbits.UARTEN = 1; // Se prende el módulo UART
 	U2STAbits.UTXEN = 1; // Empieza a transmitir. Se dispara el Flag TXIF
 
-	IFS1bits.U2TXIF = 0; // Se limpia la bandera de transmisiï¿½n
-    IEC1bits.U2TXIE = 1; // Se prende la interrupciï¿½n de transmisiï¿½n
+	IFS1bits.U2TXIF = 0; // Se limpia la bandera de transmisión
+    IEC1bits.U2TXIE = 1; // Se prende la interrupción de transmisión
 }
 
 void config(void){
     Init_Puertos();
-    Init_Timer1();
     Init_Timer6();
     Init_CN();
     Init_UART2();

@@ -18,31 +18,31 @@ unsigned char indiceTX = 0;
 
 // CAPA FISICA
 
-// Rutina de interrupciï¿½n para recepciï¿½n
+// Rutina de interrupción para recepción
 void __attribute__((interrupt, auto_psv)) _U2RXInterrupt( void ){
-	IFS1bits.U2RXIF = 0; // Se limpia la bandera de interrupciï¿½n
+	IFS1bits.U2RXIF = 0; // Se limpia la bandera de interrupción
 }
 
-//Rutina de interrupciï¿½n para transmisiï¿½n
+//Rutina de interrupción para transmisión
 void __attribute__((interrupt, auto_psv)) _U2TXInterrupt(void){
-    IFS1bits.U2TXIF = 0; // Se limpia la bandera de interrupciï¿½n
+    IFS1bits.U2TXIF = 0; // Se limpia la bandera de interrupción
 }
 
 // CAPA DE TRANSPORTE
 
-// Funciï¿½n auxiliar para calcular el checksum
+// Función auxiliar para calcular el checksum
 unsigned char calcularChecksum(){
     
 }
 
-// Funciï¿½n que revisa el destino y el checksum
+// Función que revisa el destino y el checksum
 void capaTransporte(void){
     
 }
 
 // CAPA DE APLICACION
 
-// Funciï¿½n auxiliar que arma la trama final y dispara TX
+// Función auxiliar que arma la trama final y dispara TX
 void construirPaquete(void){
     
 }

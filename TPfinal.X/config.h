@@ -5,7 +5,7 @@
 void Init_Puertos(void);
 
 // Inicialización del Timer
-void Init_Timer1(void);
+void Init_Timer6(void);
 
 // Inicialización de Change Notification
 void Init_CN(void);
