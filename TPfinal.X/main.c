@@ -40,11 +40,12 @@ void preCargarVehiculos(void){
 int main(void){
     config(); // Inicialización
     
-    //preCargarVehiculos(); // Precarga para simular
+    preCargarVehiculos(); // Precarga para simular
     
     while(1){
         // Si llega un paquete
         if(paqueteRecibido == 1){
+            capaTransporte();
             paqueteRecibido = 0; // Se baja la bandera
             
             // Logica del main
