@@ -10,7 +10,7 @@
 
 // Variables locales
 unsigned char bufferRX[20]; // Aca se guarda lo que llega de la PC
-//Aumentar bufferTX a 256?
+//Aumentar bufferTX a 256? para enviar varios autos comando H
 unsigned char bufferTX[256]; // Aca se arma la respuesta para la PC
 
 // Indices para los arreglos
@@ -82,7 +82,7 @@ void construirPaquete(void){
     bufferTX[2] = 0x02; // Dst (La PC tiene dirección 2)
     bufferTX[3] = 0x03; // Src (El microcontrolador tiene dirección 3)
     bufferTX[4] = 0x80; // Sec (Fijo en 80h)
-    
+    //bufferTX[indiceTX] = calcularChecksum();
     // Falta agregar el BCC (Checksum)
     
     indiceTX = 0; // Se empieza a enviar desde el índice 0
@@ -132,18 +132,21 @@ void capaAplicacion(void){
             break;
         // Consulta detallada de vehículos que pasaron entre dos horas
         case 'H':
-            indiceTX = 5;
+            bufferTX[5] = 'H';
+            indiceTX = 6;
             for (int i = 0; i < indiceVehiculos; i++) {
-                if (vehiculos[i].hora >= bufferRX[6] &&
-                        vehiculos[i].hora <= bufferRX[7]) {
-                    bufferTX[indiceTX++] = vehiculos[i].hora;
-                    bufferTX[indiceTX++] = vehiculos[i].minuto;
-                    bufferTX[indiceTX++] = vehiculos[i].segundo;
-                    bufferTX[indiceTX++] = vehiculos[i].velocidad;
-                    bufferTX[indiceTX++] = vehiculos[i].ejes;
+                if (indiceTX + 7 < sizeof (bufferTX)) {
+                    if (vehiculos[i].hora >= bufferRX[6] &&
+                            vehiculos[i].hora <= bufferRX[7]) {
+                        bufferTX[indiceTX++] = vehiculos[i].hora;
+                        bufferTX[indiceTX++] = vehiculos[i].minuto;
+                        bufferTX[indiceTX++] = vehiculos[i].segundo;
+                        bufferTX[indiceTX++] = vehiculos[i].velocidad;
+                        bufferTX[indiceTX++] = vehiculos[i].ejes;
+                    }
                 }
             }
-            //Reseteo por las dudasindiceTX
+
             break; 
         // Comando inconsistente
         default:
