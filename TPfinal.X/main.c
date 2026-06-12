@@ -40,7 +40,7 @@ void preCargarVehiculos(void){
 int main(void){
     config(); // Inicialización
     
-    preCargarVehiculos(); // Precarga para simular
+    //preCargarVehiculos(); // Precarga para simular
     
     while(1){
         // Si llega un paquete

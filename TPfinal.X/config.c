@@ -8,11 +8,10 @@
 #include "xc.h"
 #include "config.h"
 
-/*HAY QUE VER BIEN ESTO
+// Cálculo de baudios para la UART
 #define FCY 40000000
 #define BAUDRATE 19200
 #define BRGVAL ((FCY / BAUDRATE) / 16) - 1
-*/
 
 void Init_Puertos(void){
     // Se configuran los puertos
@@ -54,15 +53,13 @@ void Init_CN(void){
 void Init_UART2(void){
     U2MODEbits.UARTEN = 0; // Se apaga el módulo para configurarlo
     
-    /* HAY QUE VER BIEN ESTO
     // Configuración de la trama
     U2MODEbits.BRGH = 0; // Modo de velocidad estandar
     U2MODEbits.PDSEL = 0; // 8 bits, sin paridad
     U2MODEbits.STSEL = 0; // 1 bit de stop
 	U2MODEbits.RTSMD = 1; // Modo simplex
-    */ 
 
-	//U2BRG = BRGVAL;	// Se carga el valor del cálculo de baudios
+	U2BRG = BRGVAL;	// Se carga el valor del cálculo de baudios
 	IPC7 = 0x4400; // Se configura la prioridad de interrupción
 
 	IFS1bits.U2RXIF = 0; // Se limpia la bandera de recepción
