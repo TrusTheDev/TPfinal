@@ -18,31 +18,52 @@ unsigned char indiceTX = 0;
 
 // CAPA FISICA
 
-// Rutina de interrupci髇 para recepci髇
+// Rutina de interrupci贸n para recepci贸n
 void __attribute__((interrupt, auto_psv)) _U2RXInterrupt( void ){
-	IFS1bits.U2RXIF = 0; // Se limpia la bandera de interrupci髇
+	IFS1bits.U2RXIF = 0; // Se limpia la bandera de interrupci贸n
+	
+	unsigned char byteRecibido = U2RXREG; // Leer el byte que lleg贸
+
+
+    if(byteRecibido == 0xFE) { // Si llega el SOF, reiniciar el 铆ndice
+        indiceRX = 0;
+    }
+
+    bufferRX[indiceRX] = byteRecibido;
+    indiceRX++;
+
+   
+    if(indiceRX >= 2 && indiceRX >= bufferRX[1]) {  // Qty es el segundo byte (posici贸n 1) = largo total del paquete
+        paqueteRecibido = 1;                        // Avisarle al main que lleg贸 un paquete completo
+    }
+}
 }
 
-//Rutina de interrupci髇 para transmisi髇
+//Rutina de interrupci贸n para transmisi贸n
 void __attribute__((interrupt, auto_psv)) _U2TXInterrupt(void){
-    IFS1bits.U2TXIF = 0; // Se limpia la bandera de interrupci髇
+    IFS1bits.U2TXIF = 0; // Se limpia la bandera de interrupci贸n
+
+    if(indiceTX < bufferTX[1]) { // Mientras haya bytes para enviar
+        U2TXREG = bufferTX[indiceTX];
+        indiceTX++;
+    }
 }
 
 // CAPA DE TRANSPORTE
 
-// Funci髇 auxiliar para calcular el checksum
+// Funci贸n auxiliar para calcular el checksum
 unsigned char calcularChecksum(){
     
 }
 
-// Funci髇 que revisa el destino y el checksum
+// Funci贸n que revisa el destino y el checksum
 void capaTransporte(void){
     
 }
 
 // CAPA DE APLICACION
 
-// Funci髇 auxiliar que arma la trama final y dispara TX
+// Funci贸n auxiliar que arma la trama final y dispara TX
 void construirPaquete(void){
     
 }
