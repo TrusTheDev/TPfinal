@@ -19,42 +19,42 @@ unsigned char indiceTX = 0;
 
 // CAPA FISICA
 
-// Rutina de interrupción para recepción
+// Rutina de interrupciÃ³n para recepciÃ³n
 void __attribute__((interrupt, auto_psv)) _U2RXInterrupt( void ){
-    IFS1bits.U2RXIF = 0; // Se limpia la bandera de interrupción
+    IFS1bits.U2RXIF = 0; // Se limpia la bandera de interrupciÃ³n
     
     unsigned char byteRecibido = U2RXREG; // Se lee el byte que acaba de llegar
     
-    // Si el índice es 0, se espera el inicio del mensaje con SOF (0xFE)
+    // Si el Ã­ndice es 0, se espera el inicio del mensaje con SOF (0xFE)
     if(indiceRX == 0){
         if(byteRecibido == 0xFE){
             bufferRX[indiceRX] = byteRecibido;
             indiceRX++;
         }
     }
-    // Si ya pasó el SOF, se gusrda el dato y se verifica el tamaño
+    // Si ya pasÃ³ el SOF, se gusrda el dato y se verifica el tamaÃ±o
     else{
         bufferRX[indiceRX] = byteRecibido;
         indiceRX++;
-        // Si ya se recibieron 2 bytes, la posición 1 indica el tamaño
+        // Si ya se recibieron 2 bytes, la posiciÃ³n 1 indica el tamaÃ±o
         if(indiceRX > 1){
-            unsigned char qty = bufferRX[1]; // Se guarda el tamaño
-            // Si se alcanzó la cantidad total que pide el paquete
+            unsigned char qty = bufferRX[1]; // Se guarda el tamaÃ±o
+            // Si se alcanzÃ³ la cantidad total que pide el paquete
             if(indiceRX == qty){ 
                 paqueteRecibido = 1; // Se levanta la bandera para avisarle al main
-                indiceRX = 0; // Se resetea el índice para el próximo paquete
+                indiceRX = 0; // Se resetea el Ã­ndice para el prÃ³ximo paquete
             }
         }
     }
 }
 
-//Rutina de interrupción para transmisión
+//Rutina de interrupciÃ³n para transmisiÃ³n
 void __attribute__((interrupt, auto_psv)) _U2TXInterrupt(void){
-    IFS1bits.U2TXIF = 0; // Se baja la bandera de interrupción
+    IFS1bits.U2TXIF = 0; // Se baja la bandera de interrupciÃ³n
     
     unsigned char qty = bufferTX[1]; // Se obtiene la cantidad de bytes del paquete
     
-    // Si todavía no se mandaron todos los bytes
+    // Si todavÃ­a no se mandaron todos los bytes
     if(indiceTX < qty){
         U2TXREG = bufferTX[indiceTX]; // Se manda el byte actual
         indiceTX++; // Se avanza al siguiente
@@ -63,45 +63,59 @@ void __attribute__((interrupt, auto_psv)) _U2TXInterrupt(void){
 
 // CAPA DE TRANSPORTE
 
-// Función auxiliar para calcular el checksum
-unsigned int calcularChecksum(){
+// FunciÃ³n auxiliar para calcular el checksum
+unsigned int calcularChecksum(unsigned char *datos, unsigned char cantidad){
+    unsigned int suma = 0;
+    unsigned char i;
+
+    for(i = 0; i < cantidad - 1; i += 2) {
+        unsigned int word = ((unsigned int)datos[i] << 8) | datos[i + 1];
+        suma += word;
+    }
+
     
+    if(cantidad % 2 != 0) {   // Si cantidad es impar, Ãºltimo byte va solo 
+        unsigned int word = ((unsigned int)datos[cantidad - 1] << 8) | 0x00;
+        suma += word;
+    }
+
+    return suma;
 }
 
-// Función que revisa el destino y el checksum
+// FunciÃ³n que revisa el destino y el checksum
 void capaTransporte(void){
     
 }
 
 // CAPA DE APLICACION
 
-// Función auxiliar que arma la trama final y dispara TX
+// FunciÃ³n auxiliar que arma la trama final y dispara TX
 void construirPaquete(void){
     bufferTX[0] = 0xFE; // SOF (Inicio de trama)
     bufferTX[1] = indiceTX + 2; // Qty es la cantidad de bytes que se llenaron + 2 bytes del Checksum
-    bufferTX[2] = 0x02; // Dst (La PC tiene dirección 2)
-    bufferTX[3] = 0x03; // Src (El microcontrolador tiene dirección 3)
+    bufferTX[2] = 0x02; // Dst (La PC tiene direcciÃ³n 2)
+    bufferTX[3] = 0x03; // Src (El microcontrolador tiene direcciÃ³n 3)
     bufferTX[4] = 0x80; // Sec (Fijo en 80h)
     //bufferTX[indiceTX] = calcularChecksum();
     // Falta agregar el BCC (Checksum)
     
-    indiceTX = 0; // Se empieza a enviar desde el índice 0
-    IFS1bits.U2TXIF = 1; // Se prende la interrupción TX levantando el flag
+    indiceTX = 0; // Se empieza a enviar desde el Ã­ndice 0
+    IFS1bits.U2TXIF = 1; // Se prende la interrupciÃ³n TX levantando el flag
 }
 
-// Función que procesa los comandos y arma la respuesta
+// FunciÃ³n que procesa los comandos y arma la respuesta
 void capaAplicacion(void){
-    // Se lee el comando que llegó
+    // Se lee el comando que llegÃ³
     unsigned char comando = bufferRX[5];
     
     switch(comando){
-        // Consultar cantidad de vehículos de dos ejes
+        // Consultar cantidad de vehÃ­culos de dos ejes
         case 'A':
             bufferTX[6] = (unsigned char) total2Ejes; // Se obtiene el dato
             bufferTX[5] = 'A'; // Se devuelve el mismo comando
-            indiceTX = 7; // Se llenó hasta el índice 6
+            indiceTX = 7; // Se llenÃ³ hasta el Ã­ndice 6
             break;
-        // Resetear la cantidad de vehículos a 0 y borrar todos los registros
+        // Resetear la cantidad de vehÃ­culos a 0 y borrar todos los registros
         case 'B':
             // Se resetean los registros
             indiceVehiculos = 0;
@@ -110,27 +124,27 @@ void capaAplicacion(void){
             totalPesados = 0;
             totalExcesoVelocidad = 0;
             bufferTX[5] = 'B'; // Se devuelve el mismo comando
-            indiceTX = 6; // Se llenó hasta el índice 5
+            indiceTX = 6; // Se llenÃ³ hasta el Ã­ndice 5
             break;
-        // Consultar cantidad de vehículos con más de dos ejes
+        // Consultar cantidad de vehÃ­culos con mÃ¡s de dos ejes
         case 'C':
             bufferTX[6] = (unsigned char) totalPesados; // Se obtiene el dato
             bufferTX[5] = 'C'; // Se devuelve el mismo comando
-            indiceTX = 7; // Se llenó hasta el índice 6
+            indiceTX = 7; // Se llenÃ³ hasta el Ã­ndice 6
             break;
-        // Accionar la cámara fotográfica
+        // Accionar la cÃ¡mara fotogrÃ¡fica
         case 'E':
-            LATAbits.LATA0 = !LATAbits.LATA0; // Se dispara la cámara
+            LATAbits.LATA0 = !LATAbits.LATA0; // Se dispara la cÃ¡mara
             bufferTX[5] = 'E'; // Se devuelve el mismo comando
-            indiceTX = 6; // Se llenó hasta el índice 5
+            indiceTX = 6; // Se llenÃ³ hasta el Ã­ndice 5
             break;
-        // Consultar cantidad de vehículos que superaron la velocidad máxima de 60km/h
+        // Consultar cantidad de vehÃ­culos que superaron la velocidad mÃ¡xima de 60km/h
         case 'I':
             bufferTX[6] = (unsigned char) totalExcesoVelocidad; // Se obtiene el dato
             bufferTX[5] = 'I'; // Se devuelve el mismo comando
-            indiceTX = 7; // Se llenó hasta el índice 6
+            indiceTX = 7; // Se llenÃ³ hasta el Ã­ndice 6
             break;
-        // Consulta detallada de vehículos que pasaron entre dos horas
+        // Consulta detallada de vehÃ­culos que pasaron entre dos horas
         case 'H':
             bufferTX[5] = 'H';
             indiceTX = 6;
@@ -151,7 +165,7 @@ void capaAplicacion(void){
         // Comando inconsistente
         default:
             bufferTX[5] = 'G'; // Se devuelve un NAK
-            indiceTX = 6; // Se llenó hasta el índice 5
+            indiceTX = 6; // Se llenÃ³ hasta el Ã­ndice 5
             break;
     }    
     construirPaquete();
