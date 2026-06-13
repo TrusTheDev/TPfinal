@@ -176,7 +176,7 @@ void capaAplicacion(void){
             total2Ejes = 0;
             totalPesados = 0;
             totalExcesoVelocidad = 0;
-            bufferTX[5] = 'B'; // Se devuelve el mismo comando
+            bufferTX[5] = 'F'; // Se devuelve ACK
             indiceTX = 6; // Se llenó hasta el índice 5
             break;
         // Consultar cantidad de vehículos con más de dos ejes

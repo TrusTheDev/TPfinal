@@ -18,23 +18,24 @@ unsigned int totalExcesoVelocidad = 0;
 unsigned char paqueteRecibido = 0;
 
 // Función para simular vehículos
-void preCargarVehiculos(void){
+
+void preCargarVehiculos(void) {
     // Se cargan 8 vehiculos de prueba (hora, minuto, segundo, velocidad, ejes)
-    vehiculos[0] = (vehiculo){12, 30, 15, 45, 2}; 
-    vehiculos[1] = (vehiculo){12, 31, 10, 70, 2}; // Infracción
-    vehiculos[2] = (vehiculo){12, 32,  5, 40, 2}; 
+    vehiculos[0] = (vehiculo){18, 7, 26, 95, 2};
+    vehiculos[1] = (vehiculo){19, 35, 12, 50, 3};
+    vehiculos[2] = (vehiculo){12, 32, 5, 40, 2};
     vehiculos[3] = (vehiculo){12, 33, 40, 65, 4}; // Infracción y pesado
-    vehiculos[4] = (vehiculo){12, 34, 20, 50, 2}; 
+    vehiculos[4] = (vehiculo){12, 34, 20, 50, 2};
     vehiculos[5] = (vehiculo){12, 35, 40, 80, 6}; // Infracción y pesado
-    vehiculos[6] = (vehiculo){12, 36, 10, 55, 2}; 
+    vehiculos[6] = (vehiculo){12, 36, 10, 55, 2};
     vehiculos[7] = (vehiculo){12, 37, 50, 90, 4}; // Infracción y pesado
-    
+
     // Se actualizan las variables
     indiceVehiculos = 8;
     totalVehiculos = 8;
-    total2Ejes = 5;
-    totalPesados = 3;
-    totalExcesoVelocidad = 4;
+    total2Ejes = 12;
+    totalPesados = 5;
+    totalExcesoVelocidad = 20;
 }
 
 int main(void){
