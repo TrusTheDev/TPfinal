@@ -10,8 +10,8 @@
 
 // Variables locales
 unsigned char bufferRX[20]; // Aca se guarda lo que llega de la PC
-//Aumentar bufferTX a 256? para enviar varios autos comando H
 unsigned char bufferTX[256]; // Aca se arma la respuesta para la PC
+
 // Indices para los arreglos
 unsigned char indiceRX = 0;
 unsigned char indiceTX = 0;
@@ -21,7 +21,9 @@ unsigned char indiceTX = 0;
 // Rutina de interrupción para recepción
 void __attribute__((interrupt, auto_psv)) _U2RXInterrupt( void ){
     IFS1bits.U2RXIF = 0; // Se limpia la bandera de interrupción
+    
     unsigned char byteRecibido = U2RXREG; // Se lee el byte que acaba de llegar
+    
     // Si el índice es 0, se espera el inicio del mensaje con SOF (0xFE)
     if(indiceRX == 0){
         if(byteRecibido == 0xFE){
@@ -47,106 +49,94 @@ void __attribute__((interrupt, auto_psv)) _U2RXInterrupt( void ){
 
 //Rutina de interrupción para transmisión
 void __attribute__((interrupt, auto_psv)) _U2TXInterrupt(void){
-
-    IFS1bits.U2TXIF = 0; // Se baja la bandera
-
-    unsigned char qty = bufferTX[1];
-
-    // Mientras queden bytes por transmitir
+    IFS1bits.U2TXIF = 0; // Se baja la bandera de interrupción
+    
+    unsigned char qty = bufferTX[1]; // Se obtiene la cantidad de bytes del paquete
+    
+    // Si todavía no se mandaron todos los bytes
     if(indiceTX < qty){
-        unsigned char dato = bufferTX[indiceTX];
-        unsigned char nibbleAlto = (dato >> 4) & 0x0F;
-        unsigned char nibbleBajo = dato & 0x0F;
-        // Transmitir primer caracter HEX
-        if(nibbleAlto < 10)
-            U2TXREG = '0' + nibbleAlto;
-        else
-            U2TXREG = 'A' + (nibbleAlto - 10);
-        while(!U2STAbits.TRMT);
-        // Transmitir segundo caracter HEX
-        if(nibbleBajo < 10)
-            U2TXREG = '0' + nibbleBajo;
-        else
-            U2TXREG = 'A' + (nibbleBajo - 10);
-        while(!U2STAbits.TRMT);
-        // Espacio separador borrar al final?
-        U2TXREG = ' ';
-        while(!U2STAbits.TRMT);
-        indiceTX++;
+        U2TXREG = bufferTX[indiceTX]; // Se manda el byte actual
+        indiceTX++; // Se avanza al siguiente
     }
     else{
-        IEC1bits.U2TXIE = 0;
+        // Si ya se mandaron todos los bytes
+        IEC1bits.U2TXIE = 0; // Se apaga la interrupción
     }
 }
 
 // CAPA DE TRANSPORTE
 
 // Función auxiliar para calcular el checksum
-unsigned int calcularChecksum (unsigned char *datos, unsigned char cantidad) {
+unsigned int calcularChecksum(unsigned char *datos, unsigned int cantidad){
     unsigned int suma = 0;
-    unsigned char i;
-    for(i = 0; i < cantidad - 1; i += 2) {
-        unsigned int word = ((unsigned int)datos[i] << 8) | datos[i + 1];
+    // Se recorre el arreglo saltando de a 2 bytes
+    for(unsigned int i = 0; i < cantidad - 1; i += 2) {
+        unsigned int word = ((unsigned int)datos[i] << 8) | datos[i + 1]; // Une los dos bytes en uno de 16 bits
         suma += word;
     }
-    if(cantidad % 2 != 0) {   // Si cantidad es impar, último byte va solo 
-        unsigned int word = ((unsigned int)datos[cantidad - 1] << 8) | 0x00;
+    // Si la cantidad es impar, el último byte queda suelto
+    if(cantidad % 2 != 0){   
+        unsigned int word = ((unsigned int)datos[cantidad - 1] << 8) | 0x00; // Se completa con ceros a la derecha
         suma += word;
     }
     return suma;
 }
-// Función que revisa el destino y el checksum
-void capaTransporte(void) {
-    // Verificar SOF
-    if (bufferRX[0] != 0xFE) {
-        bufferTX[5] = 'G'; // envia el nack y sale
-        indiceTX = 6;
-        construirPaquete();
-        return;
+// Función que revisa el comienzo del mensaje (SOF) el destino (Dst) y el Checksum (BBC)
+void capaTransporte(void){
+    unsigned char qty = bufferRX[1];
+    unsigned char paqueteValido = 1; // Bandera para controlar si está todo correcto
+    
+    // Si el SOF y/o el Dst es incorrecto
+    if(bufferRX[0] != 0xFE || bufferRX[2] != 0x03){
+        paqueteValido = 0; // El marco es inconsistente
     }
-    // Verificar destino
-    if (bufferRX[2] != 0x03) {
-        bufferTX[5] = 'G'; // envia el nack y sale
-        indiceTX = 6;
-        construirPaquete();
-        return;
+    // Si son correctos
+    else{
+        // Se revisa el BBC
+        unsigned int bccCalculado = calcularChecksum(bufferRX, qty - 2);
+        unsigned int bccRecibido = ((unsigned int)bufferRX[qty - 2] << 8) | bufferRX[qty - 1];
+        // Si el BBC es incorrecto
+        if(bccCalculado != bccRecibido){
+            paqueteValido = 0; // El marco es inconsistente
+        }
     }
-    // Verificar BCC
-    unsigned int qty = bufferRX[1];
-    unsigned int bccRecibido = ((unsigned int) bufferRX[qty - 2] << 8) | bufferRX[qty - 1];
-    unsigned int bccCalculado = calcularChecksum(bufferRX, qty - 2);
-    if (bccRecibido != bccCalculado) {
-        bufferTX[5] = 'G'; // envia el nack y sale
-        indiceTX = 6;
-        construirPaquete();
-        return;
+    // Si el paquete es correcto
+    if(paqueteValido == 1){
+        capaAplicacion(); // Se pasa a la Capa de Aplicación
     }
-    capaAplicacion(); // si todo esta ok llega aca
+    // Si el paquete es inconsistente
+    else{
+        bufferTX[5] = 'G'; // Se devuelve un NACK
+        indiceTX = 6; // Se llenó hasta el índice 5
+        construirPaquete();
+    }
 }
+
 // CAPA DE APLICACION
 
 // Función auxiliar que arma la trama final y dispara TX
-
 void construirPaquete(void){
-    unsigned int checksum;
-    bufferTX[0] = 0xFE;
-    bufferTX[2] = 0x02;
-    bufferTX[3] = 0x03;
-    bufferTX[4] = 0x80;
-    bufferTX[1] = indiceTX + 2;
-    checksum = calcularChecksum(bufferTX, indiceTX);
-    bufferTX[indiceTX++] = (checksum >> 8) & 0xFF;
-    bufferTX[indiceTX++] = checksum & 0xFF;
-    bufferTX[1] = indiceTX;
-    indiceTX = 0;
-    IEC1bits.U2TXIE = 1;
-    IFS1bits.U2TXIF = 1;
+    bufferTX[0] = 0xFE; // SOF (Inicio de trama)
+    bufferTX[1] = indiceTX + 2; // Qty es la cantidad de bytes que se llenaron + 2 bytes del Checksum
+    bufferTX[2] = 0x02; // Dst (La PC tiene dirección 2)
+    bufferTX[3] = 0x03; // Src (El microcontrolador tiene dirección 3)
+    bufferTX[4] = 0x80; // Sec (Fijo en 80h)
+    
+    unsigned int checksum = calcularChecksum(bufferTX, indiceTX); // Se calcula el Checksum
+    
+    // Se guarda el Checksum (1 word) en 2 bytes
+    bufferTX[indiceTX++] = (checksum >> 8); // Parte Alta (BCCH)
+    bufferTX[indiceTX] = checksum & 0x00FF; // Parte Baja (BCCL)
+    
+    // Se dispara la transmisión
+    indiceTX = 0; // Se empieza a enviar desde el índice 0
+    IEC1bits.U2TXIE = 1; // Habilitamos la interrupción
+    IFS1bits.U2TXIF = 1; // Se prende la interrupción TX levantando el flag
 }
 
 // Función que procesa los comandos y arma la respuesta
 void capaAplicacion(void){
-    // Se lee el comando que llegó
-    unsigned char comando = bufferRX[5];
+    unsigned char comando = bufferRX[5]; // Se lee el comando que llegó
     
     switch(comando){
         // Consultar cantidad de vehículos de dos ejes
@@ -188,10 +178,17 @@ void capaAplicacion(void){
         case 'H':
             bufferTX[5] = 'H';
             indiceTX = 6;
-            for (int i = 0; i < indiceVehiculos; i++) {
-                if (indiceTX + 7 <= sizeof (bufferTX)) {
-                    if (vehiculos[i].hora >= bufferRX[6] &&
-                            vehiculos[i].hora <= bufferRX[7]) {
+            // Se ve cuantos lugares hay que revisar
+            unsigned int cantidadRevisar = totalVehiculos;
+            if(cantidadRevisar > 256){
+                cantidadRevisar = 256; // Máximo 256
+            }
+            // Se recorre el historial
+            for(unsigned int i = 0; i < cantidadRevisar; i++){
+                // Se verifica que haya espacio en el buffer (5 bytes del auto + 2 del BCC)
+                if(indiceTX + 7 <= 255){ 
+                    // Se filtra por la hora pedida
+                    if(vehiculos[i].hora >= bufferRX[6] && vehiculos[i].hora <= bufferRX[7]){
                         bufferTX[indiceTX++] = vehiculos[i].hora;
                         bufferTX[indiceTX++] = vehiculos[i].minuto;
                         bufferTX[indiceTX++] = vehiculos[i].segundo;
@@ -200,8 +197,7 @@ void capaAplicacion(void){
                     }
                 }
             }
-
-            break; 
+            break;
         // Comando inconsistente
         default:
             bufferTX[5] = 'G'; // Se devuelve un NAK

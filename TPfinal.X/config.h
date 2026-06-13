@@ -4,7 +4,7 @@
 // Inicialización de los puertos
 void Init_Puertos(void);
 
-// Inicialización del Timer
+// Inicialización del Timer 6
 void Init_Timer6(void);
 
 // Inicialización de Change Notification

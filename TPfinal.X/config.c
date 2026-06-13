@@ -24,7 +24,7 @@ void Init_Puertos(void){
 }
 
 // Timer configurado para 40MHz
-void Init_Timer6( void ){
+void Init_Timer6(void){
     // Se configura Timer6 para medir el tiempo entre sensores
     T6CONbits.TON = 0; // Se asegura que esté apagado para configurarlo
     T6CONbits.TCKPS = 1; // Prescaler 1:8
