@@ -28,11 +28,15 @@ void preCargarVehiculos(void){
     vehiculos[5] = (vehiculo){12, 35, 40, 80, 6}; // Infracción y pesado
     vehiculos[6] = (vehiculo){12, 36, 10, 55, 2}; 
     vehiculos[7] = (vehiculo){12, 37, 50, 90, 4}; // Infracción y pesado
+    vehiculos[8] = (vehiculo){8, 15, 22, 45, 2};
+vehiculos[9] = (vehiculo){9, 48, 10, 72, 3};
+vehiculos[10] = (vehiculo){11, 5, 3, 58, 2};
+vehiculos[11] = (vehiculo){14, 27, 41, 110, 5};
     
     // Se actualizan las variables
-    indiceVehiculos = 8;
-    totalVehiculos = 8;
-    total2Ejes = 5;
+    indiceVehiculos = 12;
+    totalVehiculos = 12;
+    total2Ejes = 12;
     totalPesados = 3;
     totalExcesoVelocidad = 4;
 }

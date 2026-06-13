@@ -47,15 +47,34 @@ void __attribute__((interrupt, auto_psv)) _U2RXInterrupt( void ){
 
 //Rutina de interrupción para transmisión
 void __attribute__((interrupt, auto_psv)) _U2TXInterrupt(void){
-    IFS1bits.U2TXIF = 0; // Se baja la bandera de interrupción
-    unsigned char qty = bufferTX[1]; // Se obtiene la cantidad de bytes del paquete
-    // Si todavía no se mandaron todos los bytes
+
+    IFS1bits.U2TXIF = 0; // Se baja la bandera
+
+    unsigned char qty = bufferTX[1];
+
+    // Mientras queden bytes por transmitir
     if(indiceTX < qty){
-        U2TXREG = bufferTX[indiceTX]; // Se manda el byte actual
-        indiceTX++; // Se avanza al siguiente
+        unsigned char dato = bufferTX[indiceTX];
+        unsigned char nibbleAlto = (dato >> 4) & 0x0F;
+        unsigned char nibbleBajo = dato & 0x0F;
+        // Transmitir primer caracter HEX
+        if(nibbleAlto < 10)
+            U2TXREG = '0' + nibbleAlto;
+        else
+            U2TXREG = 'A' + (nibbleAlto - 10);
+        while(!U2STAbits.TRMT);
+        // Transmitir segundo caracter HEX
+        if(nibbleBajo < 10)
+            U2TXREG = '0' + nibbleBajo;
+        else
+            U2TXREG = 'A' + (nibbleBajo - 10);
+        while(!U2STAbits.TRMT);
+        // Espacio separador borrar al final?
+        U2TXREG = ' ';
+        while(!U2STAbits.TRMT);
+        indiceTX++;
     }
-    else {
-       
+    else{
         IEC1bits.U2TXIE = 0;
     }
 }
@@ -114,18 +133,12 @@ void construirPaquete(void){
     bufferTX[2] = 0x02;
     bufferTX[3] = 0x03;
     bufferTX[4] = 0x80;
-
     bufferTX[1] = indiceTX + 2;
-
     checksum = calcularChecksum(bufferTX, indiceTX);
-
     bufferTX[indiceTX++] = (checksum >> 8) & 0xFF;
     bufferTX[indiceTX++] = checksum & 0xFF;
-
     bufferTX[1] = indiceTX;
-
     indiceTX = 0;
-
     IEC1bits.U2TXIE = 1;
     IFS1bits.U2TXIF = 1;
 }
