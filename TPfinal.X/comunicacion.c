@@ -9,7 +9,7 @@
 #include "common.h"
 
 // Variables locales
-unsigned char bufferRX[20]; // Aca se guarda lo que llega de la PC
+unsigned char bufferRX[256]; // Aca se guarda lo que llega de la PC
 unsigned char bufferTX[256]; // Aca se arma la respuesta para la PC
 
 // Indices para los arreglos
@@ -21,9 +21,7 @@ unsigned char indiceTX = 0;
 // Rutina de interrupción para recepción
 void __attribute__((interrupt, auto_psv)) _U2RXInterrupt( void ){
     IFS1bits.U2RXIF = 0; // Se limpia la bandera de interrupción
-    
     unsigned char byteRecibido = U2RXREG; // Se lee el byte que acaba de llegar
-    
     // Si el índice es 0, se espera el inicio del mensaje con SOF (0xFE)
     if(indiceRX == 0){
         if(byteRecibido == 0xFE){
@@ -48,53 +46,26 @@ void __attribute__((interrupt, auto_psv)) _U2RXInterrupt( void ){
 }
 
 //Rutina de interrupción para transmisión
-//Indica la cantidad de bytes que vamos enviando
-int contadorByte = 0;
 void __attribute__((interrupt, auto_psv)) _U2TXInterrupt(void){
-    IFS1bits.U2TXIF = 0;
-    unsigned char qty = bufferTX[1];
-    //Como ahora mandamos de a 1 byte por cada caracter qty * 2
-    if(indiceTX < (qty * 2)){
-        unsigned char dato = bufferTX[contadorByte];
-        unsigned char nibble;
-        //Si indice es par entonces lo que se transmite es el nibble alto entonces lo muevo a la derecha
-        if((indiceTX % 2) == 0){
-            nibble = (dato >> 4) & 0x0F;
-        }
-        //si es impar lo que se transmite es el nibble bajo entonces lo muevo a la izquierda
-        else{
-            nibble = dato & 0x0F;
-            //como ya transmitimos al menos 2 bytes para enviar aumentamos
-            contadorByte++;
-        }
-        /*
-         * Conversion hexa a a ASCII
-         Esto pasa por que el valor F en hexa != 'F' entonces hay que convertir bases
-         * Si nibble es: 0..9 en hexa
-         * entonces no hay que usar letras sino números en ASCII
-         * Si nibble es: A..F en hexa
-         * entonces tenemos que usar letras
-         */
-        if(nibble < 10){
-            U2TXREG = nibble + '0';
-        }
-        else{       
-            U2TXREG = (nibble - 10) + 'A';
-        }
-        indiceTX++;
+    IFS1bits.U2TXIF = 0; // Se baja la bandera de interrupción
+    unsigned char qty = bufferTX[1]; // Se obtiene la cantidad de bytes del paquete
+    // Si todavía no se mandaron todos los bytes
+    if(indiceTX < qty){
+        U2TXREG = bufferTX[indiceTX]; // Se manda el byte actual
+        indiceTX++; // Se avanza al siguiente
     }
     else{
-        IEC1bits.U2TXIE = 0;
-        indiceTX = 0;
-        contadorByte = 0;
+        // Si ya se mandaron todos los bytes
+        IEC1bits.U2TXIE = 0; // Se apaga la interrupción
     }
 }
 // CAPA DE TRANSPORTE
+
 // Función auxiliar para calcular el checksum
 unsigned int calcularChecksum(unsigned char *datos, unsigned int cantidad){
     unsigned int suma = 0;
     // Se recorre el arreglo saltando de a 2 bytes
-    for(unsigned int i = 0; i < cantidad - 1; i += 2) {
+    for(unsigned int i = 0; i < cantidad - 1; i += 2){
         unsigned int word = ((unsigned int)datos[i] << 8) | datos[i + 1]; // Une los dos bytes en uno de 16 bits
         suma += word;
     }
@@ -105,6 +76,7 @@ unsigned int calcularChecksum(unsigned char *datos, unsigned int cantidad){
     }
     return suma;
 }
+
 // Función que revisa el comienzo del mensaje (SOF) el destino (Dst) y el Checksum (BBC)
 void capaTransporte(void){
     unsigned char qty = bufferRX[1];
@@ -137,6 +109,7 @@ void capaTransporte(void){
 }
 
 // CAPA DE APLICACION
+
 // Función auxiliar que arma la trama final y dispara TX
 void construirPaquete(void){
     bufferTX[0] = 0xFE; // SOF (Inicio de trama)

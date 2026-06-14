@@ -15,8 +15,8 @@
 
 void Init_Puertos(void){
     // Se configuran los puertos
-    TRISDbits.TRISD6 = 1;  // Sensor cable 1 como entrada
-    TRISDbits.TRISD7 = 1;  // Sensor cable 2 como entrada
+    TRISDbits.TRISD6 = 1; // Sensor cable 1 como entrada
+    TRISDbits.TRISD7 = 1; // Sensor cable 2 como entrada
     TRISDbits.TRISD13 = 1; // Sensor inductivo como entrada
     
     TRISAbits.TRISA0 = 0; // Cámara fotográfica como salida
